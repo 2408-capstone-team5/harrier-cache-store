@@ -8,7 +8,7 @@ runs:
       shell: bash
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
-    - name: Run confirm and update cache script
-      run: harrier-cache-confirm-update.sh
+    - name: Retrieve latest cache of dependencies, if cache exists and is valid
+      run: harrier-cache-load.sh
       shell: bash
       
