@@ -1,4 +1,4 @@
-name: Confirm state of cache and update as needed
+name: Confirm state of cache and store or refresh as needed
 description: If cache does not exist or is outdated, cache current node_modules directory and update cache key
 runs:
   using: "composite"
@@ -8,7 +8,6 @@ runs:
       shell: bash
       env:
         GITHUB_ACTION_PATH: ${{ github.action_path }}
-    - name: Retrieve latest cache of dependencies, if cache exists and is valid
-      run: harrier-cache-load.sh
+    - name: Run cache-store to store or refresh cache
+      run: harrier-cache-store.sh
       shell: bash
-      
