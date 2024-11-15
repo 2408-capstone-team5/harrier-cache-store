@@ -15,3 +15,4 @@ runs:
         GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
         GITHUB_REPOSITORY: ${{ github.repository }}
         GITHUB_REF: ${{ github.ref }}
+        HASH_FILES_PACKAGE_JSON: ${{ hashFiles('package.json') }}
