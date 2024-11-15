@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Check if cache key exists
-if [ ls ../../../s3bucket/node_modules_cache_key/${{ github.repository_owner }}-${{ github.event.repository.name }}-${GITHUB_REF#refs/heads/}*.txt 1> /dev/null 2>&1]
+if [ ls ../../../s3bucket/node_modules_cache_key/${GITHUB_REPOSITORY_OWNER}-${GITHUB_REPOSITORY##*/}-${GITHUB_REF#refs/heads/}*.txt 1> /dev/null 2>&1]
 then
   echo "cache key file exists."
   echo "KEY_EXISTS=true" >> $GITHUB_ENV
@@ -13,7 +13,7 @@ fi
 # Get latest cache key if it exists
 if [${{ env.KEY_EXISTS == 'true' }}]
 then
-  latest_key_file=$(ls ../../../s3bucket/node_modules_cache_key/${{ github.repository_owner }}-${{ github.event.repository.name }}-${GITHUB_REF#refs/heads/}*.txt | sort -t'_' -k2,2 -r | head -n 1)
+  latest_key_file=$(ls ../../../s3bucket/node_modules_cache_key/${GITHUB_REPOSITORY_OWNER}-${GITHUB_REPOSITORY##*/}-${GITHUB_REF#refs/heads/}*.txt | sort -t'_' -k2,2 -r | head -n 1)
   echo "Latest file: $latest_key_file"
   echo "LATEST_KEY=$latest_key_file" >> $GITHUB_ENV
 
@@ -33,10 +33,10 @@ then
 if [${{ env.KEY_EXISTS == 'false' || (env.KEY_EXISTS == 'true' && env.CACHE_MATCH == 'false') }}]
 then
   echo "creating new cached tar file."
-  tar -czvf ${{ github.repository_owner }}-${{ github.event.repository.name }}-${GITHUB_REF#refs/heads/}.tar.gz node_modules
-  cp ${{ github.repository_owner }}-${{ github.event.repository.name }}-${GITHUB_REF#refs/heads/}.tar.gz ../../../s3bucket/node_modules_cached_tar/
+  tar -czvf ${GITHUB_REPOSITORY_OWNER}-${GITHUB_REPOSITORY##*/}-${GITHUB_REF#refs/heads/}.tar.gz node_modules
+  cp ${GITHUB_REPOSITORY_OWNER}-${GITHUB_REPOSITORY##*/}-${GITHUB_REF#refs/heads/}.tar.gz ../../../s3bucket/node_modules_cached_tar/
 
 # Create new cache key
 TIMESTAMP=$(date +'%Y-%m-%d-%H-%M-%S')
 echo "create new cache key with timestamp: $TIMESTAMP"
-echo '${{ hashFiles('package.json') }}' > ../../../s3bucket/node_modules_cache_key/${{ github.repository_owner }}-${{ github.event.repository.name }}-${GITHUB_REF#refs/heads/}_${TIMESTAMP}.txt
+echo '${{ hashFiles('package.json') }}' > ../../../s3bucket/node_modules_cache_key/${GITHUB_REPOSITORY_OWNER}-${GITHUB_REPOSITORY##*/}-${GITHUB_REF#refs/heads/}_${TIMESTAMP}.txt
