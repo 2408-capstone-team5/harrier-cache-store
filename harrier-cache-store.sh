@@ -33,7 +33,7 @@ then
 if [${{ env.KEY_EXISTS == 'false' || (env.KEY_EXISTS == 'true' && env.CACHE_MATCH == 'false') }}]
 then
   echo "creating new cached tar file."
-  tar -czvf ${GITHUB_REPOSITORY_OWNER}-${GITHUB_REPOSITORY##*/}-${GITHUB_REF#refs/heads/}.tar.gz node_modules
+  tar -czf ${GITHUB_REPOSITORY_OWNER}-${GITHUB_REPOSITORY##*/}-${GITHUB_REF#refs/heads/}.tar.gz node_modules
   cp ${GITHUB_REPOSITORY_OWNER}-${GITHUB_REPOSITORY##*/}-${GITHUB_REF#refs/heads/}.tar.gz ../../../s3bucket/node_modules_cached_tar/
 
 # Create new cache key
